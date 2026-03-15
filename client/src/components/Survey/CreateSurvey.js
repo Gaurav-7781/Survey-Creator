@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Trigger recompile
+import React, { useState } from 'react';
 import {
     Container,
     Paper,
@@ -96,44 +96,18 @@ const CreateSurvey = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Creating survey...');
         
-        // Basic validation
         if (!title.trim()) {
             alert('Please enter a survey title');
             return;
         }
         
-        // Log data for debugging
-        console.log('Survey Data:', {
-            title,
-            description,
-            questions,
-            settings
-        });
-        
         try {
-            const surveyData = { 
-                title, 
-                description, 
-                questions, 
-                settings 
-            };
-            
-            // Check if surveyAPI exists
-            if (!surveyAPI || !surveyAPI.createSurvey) {
-                console.error('surveyAPI.createSurvey not found');
-                alert('API service not configured. Check console.');
-                return;
-            }
-            
-            console.log('Calling API...');
+            const surveyData = { title, description, questions, settings };
             const response = await surveyAPI.createSurvey(surveyData);
-            console.log('API Response:', response.data);
-            
+            console.log('Survey created:', response.data);
             alert('Survey created successfully!');
             navigate('/surveys');
-            
         } catch (error) {
             console.error('Failed to create survey:', error);
             alert('Failed to create survey. Error: ' + (error.message || 'Unknown error'));
@@ -209,10 +183,10 @@ const CreateSurvey = () => {
                                         size="small"
                                         sx={{ bgcolor: '#fff1f2', '&:hover': { bgcolor: '#ffe4e6' } }}
                                     >
-                                        <Delete />
+                                        <Delete fontSize="small" />
                                     </IconButton>
                                 </Box>
-                                
+
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} md={4}>
                                         <FormControl fullWidth>
@@ -314,13 +288,7 @@ const CreateSurvey = () => {
                     
                     <Paper 
                         variant="outlined" 
-                        sx={{ 
-                            mt: 4, 
-                            p: 3, 
-                            bgcolor: '#f8fafc', 
-                            borderColor: '#e2e8f0',
-                            borderRadius: 2
-                        }}
+                        sx={{ mt: 4, p: 3, bgcolor: '#f8fafc', borderColor: '#e2e8f0', borderRadius: 2 }}
                     >
                         <Typography variant="h6" sx={{ color: '#1e293b', mb: 2 }}>
                             Survey Settings

@@ -12,4 +12,5 @@ router.put('/:id', auth, surveyController.updateSurvey);
 router.delete('/:id', auth, surveyController.deleteSurvey);
 router.get('/link/:link', surveyController.getSurveyByLink);
 
+
 module.exports = router;

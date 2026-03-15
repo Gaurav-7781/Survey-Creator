@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [token, setToken] = useState(localStorage.getItem('token'));
 
-    // Load user on token change
+    // Load user on token change - only if user not already loaded
     useEffect(() => {
         if (token && !user) {
             loadUser();
@@ -21,12 +21,10 @@ export const AuthProvider = ({ children }) => {
 
     const loadUser = async () => {
         try {
-            console.log('🔍 Loading user...');
             const response = await authAPI.getCurrentUser();
-            console.log('✅ User loaded:', response.data);
             setUser(response.data);
         } catch (error) {
-            console.error('❌ Failed to load user:', error);
+            console.error('Failed to load user:', error);
             logout();
         } finally {
             setLoading(false);
@@ -35,38 +33,22 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (userData) => {
         try {
-            console.log('📝 Registering user:', userData);
-            
             const response = await authAPI.register(userData);
-            console.log('✅ Registration response:', response.data);
-            
             const { token, user } = response.data;
             
             if (token && user) {
                 localStorage.setItem('token', token);
                 setToken(token);
                 setUser(user);
-                console.log('✅ Registration successful!');
                 return { success: true };
             } else {
-                console.error('❌ Invalid response format:', response.data);
-                return { 
-                    success: false, 
-                    error: 'Invalid server response format' 
-                };
+                return { success: false, error: 'Invalid server response format' };
             }
         } catch (error) {
-            console.error('❌ Registration error:', error);
-            console.error('❌ Error details:', {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status
-            });
             let errorMessage = error.response?.data?.message;
             if (!errorMessage && error.response?.data?.errors?.length > 0) {
                 errorMessage = error.response.data.errors[0].msg;
             }
-            
             return { 
                 success: false, 
                 error: errorMessage || error.message || 'Registration failed' 
@@ -76,38 +58,22 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         try {
-            console.log('🔐 Attempting login:', credentials);
-            
             const response = await authAPI.login(credentials);
-            console.log('✅ Login response:', response.data);
-            
             const { token, user } = response.data;
             
             if (token && user) {
                 localStorage.setItem('token', token);
                 setToken(token);
                 setUser(user);
-                console.log('✅ Login successful!');
                 return { success: true };
             } else {
-                console.error('❌ Invalid response format:', response.data);
-                return { 
-                    success: false, 
-                    error: 'No authentication token received' 
-                };
+                return { success: false, error: 'No authentication token received' };
             }
         } catch (error) {
-            console.error('❌ Login error:', error);
-            console.error('❌ Error details:', {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status
-            });
             let errorMessage = error.response?.data?.message;
             if (!errorMessage && error.response?.data?.errors?.length > 0) {
                 errorMessage = error.response.data.errors[0].msg;
             }
-            
             return { 
                 success: false, 
                 error: errorMessage || error.message || 'Login failed' 
@@ -116,7 +82,6 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        console.log('👋 Logging out...');
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);

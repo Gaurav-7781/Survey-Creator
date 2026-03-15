@@ -55,7 +55,7 @@ const Login = () => {
                     Welcome Back
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 4, textAlign: 'center' }}>
-                    Log in to survey flow to manage your forms and view insights.
+                    Log in to SurveyFlow to manage your forms and view insights.
                 </Typography>
                 
                 {error && (

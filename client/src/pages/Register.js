@@ -25,25 +25,19 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted');
         
         if (password !== confirmPassword) {
-            console.log('Passwords do not match');
             return setError('Passwords do not match');
         }
         
-        console.log('Passwords match, proceeding with registration');
         setError('');
         setLoading(true);
 
         const result = await register({ username, email, password });
-        console.log('Registration result:', result);
         
         if (result.success) {
-            console.log('Registration successful, navigating to dashboard');
             navigate('/dashboard');
         } else {
-            console.log('Registration failed with error:', result.error);
             setError(result.error);
         }
         

@@ -1,10 +1,12 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, Container } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, Container, IconButton } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { LightMode, DarkMode } from '@mui/icons-material';
 import { useAuth } from '../../context/AuthContext';
+import { useThemeContext } from '../../context/ThemeContext';
 
 const Header = () => {
     const { user, logout, isAuthenticated } = useAuth();
+    const { darkMode, toggleTheme } = useThemeContext();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -14,11 +16,12 @@ const Header = () => {
 
     return (
         <AppBar position="sticky" elevation={0} sx={{ 
-            background: 'rgba(255, 255, 255, 0.85)', 
+            background: darkMode ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.85)', 
             backdropFilter: 'blur(12px)',
-            borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+            borderBottom: darkMode ? '1px solid rgba(148, 163, 184, 0.1)' : '1px solid rgba(226, 232, 240, 0.8)',
             color: 'text.primary',
-            zIndex: 1100
+            zIndex: 1100,
+            transition: 'background-color 0.3s ease, border-color 0.3s ease'
         }}>
             <Container maxWidth="lg">
                 <Toolbar disableGutters sx={{ minHeight: 70 }}>
@@ -99,6 +102,17 @@ const Header = () => {
                                 </Button>
                             </>
                         )}
+                        <IconButton 
+                            onClick={toggleTheme} 
+                            color="inherit" 
+                            sx={{ 
+                                ml: 1, 
+                                bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                                '&:hover': { bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }
+                            }}
+                        >
+                            {darkMode ? <LightMode /> : <DarkMode />}
+                        </IconButton>
                     </Box>
                 </Toolbar>
             </Container>
